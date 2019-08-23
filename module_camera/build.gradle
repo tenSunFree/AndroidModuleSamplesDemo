@@ -1,0 +1,64 @@
+if (isModule.toBoolean()) { // 配置可自動將組件在Application和Library屬性之間切換的方法
+    apply plugin: 'com.android.application' // application屬性, 可以獨立運行的Android程序, 也就是我們的APP
+} else {
+    apply plugin: 'com.android.library' // library屬性, 不可以獨立運行, 一般是Android程序依賴的庫文件
+}
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+kapt {
+    arguments {
+        arg("AROUTER_MODULE_NAME", project.getName())
+    }
+    generateStubs = true
+}
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    defaultConfig {
+        if (isModule.toBoolean()) {
+            applicationId "com.home.module_camera"
+            multiDexEnabled true
+        }
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    resourcePrefix "camera_" // 資源名前綴, 解決資源衝突問題
+
+    sourceSets {
+        main {
+            if (isModule.toBoolean()) {
+                manifest.srcFile 'src/main/module/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+
+                // 集成開發模式下排除debug文件夾中的所有Java文件
+                java {
+                    exclude 'debug/**'
+                }
+                kotlin {
+                    exclude 'debug/**'
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':module_base')
+    kapt rootProject.ext.otherDeps["arouter-compiler"]
+}

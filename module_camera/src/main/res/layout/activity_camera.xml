@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        android:background="#714E3D"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.home.module_camera.CameraActivity" tools:ignore="ResourceName">
+
+    <TextView
+            android:textColor="#522E75"
+            android:layout_margin="16dp"
+            android:textSize="24dp"
+            android:text="camera_activity_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:textColor="#52591F"
+                android:id="@+id/text_view_action"
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:textColor="#02080F"
+                android:layout_marginTop="16dp"
+                android:id="@+id/text_view_name"
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:textColor="#02080F"
+                android:layout_marginTop="16dp"
+                android:id="@+id/text_view_email"
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

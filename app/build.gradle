@@ -1,0 +1,46 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+kapt {
+    arguments {
+        arg("AROUTER_MODULE_NAME", project.getName())
+    }
+    generateStubs = true
+}
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    defaultConfig {
+        applicationId "com.home.androidmodulesamplesdemo"
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    resourcePrefix "app_" // 資源名前綴, 解決資源衝突問題
+    buildTypes {
+        release {
+            minifyEnabled true // 開啟刪除無用代碼, 比如沒有引用到的代碼
+            shrinkResources true // 開啟刪除無用資源, 也就是沒有被引用的文件, 需要配合minifyEnable使用, 只有當兩者都為true的時候, 才會起到真正的刪除無效代碼和無引用資源的目的
+            zipAlignEnabled true // 可以讓安裝包中的資源按4字節對齊, 這樣可以減少應用在運行時的內存消耗
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    testImplementation rootProject.ext.testDeps["junit"]
+    androidTestImplementation rootProject.ext.testDeps["runner"]
+    androidTestImplementation rootProject.ext.testDeps["espresso-core"]
+    implementation project(':module_base')
+    kapt rootProject.ext.otherDeps["arouter-compiler"]
+    if (!isModule.toBoolean()) {
+        implementation project(':module_camera')
+    }
+}
